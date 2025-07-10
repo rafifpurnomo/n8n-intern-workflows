@@ -1,0 +1,674 @@
+{
+  "name": "PDF-Validation",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "\npakai RAG dan Qdrant Vector Store untuk menyimpan pdf",
+        "height": 80,
+        "width": 200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        860,
+        -400
+      ],
+      "typeVersion": 1,
+      "id": "1f5f573d-ab2f-4551-a134-cd0f3f6c4225",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "decode",
+        "token": "={{ $json.token }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jwt",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        40
+      ],
+      "id": "de0b5dea-a0a2-4a73-9f51-dfb28b445960",
+      "name": "JWT",
+      "credentials": {
+        "jwtAuth": {
+          "id": "wQv7Mmg2TdsmIkxQ",
+          "name": "JWT Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "673c3b44-570f-4e67-b8b4-1837a69b4e2a",
+        "responseMode": "responseNode",
+        "options": {
+          "binaryPropertyName": "file"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        -420
+      ],
+      "id": "fffe1d03-ead1-4201-bfb5-5a1a17c03081",
+      "name": "Webhook",
+      "webhookId": "673c3b44-570f-4e67-b8b4-1837a69b4e2a"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6008934a-29d4-4fa0-8da9-1d17a49351cb",
+              "leftValue": "={{ $json.token }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        40
+      ],
+      "id": "ca0bae4d-35f6-46f7-af9d-c5c910afbe9d",
+      "name": "isToken?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = Math.floor(Date.now() / 1000);\nconst exp = $json.payload.exp;\nreturn [\n  {\n    json: {\n      isExpired: now > exp,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        40
+      ],
+      "id": "e5353f8b-e1b1-435d-b7a3-891e09ecde94",
+      "name": "validation exp token"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0a86cff5-bf94-432f-839c-ae3e232b4c28",
+              "leftValue": "={{ $json.isExpired }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2040,
+        -160
+      ],
+      "id": "d7886979-9e2e-4600-8ad6-c382f8be68de",
+      "name": "isToken exp?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"Sesi anda telah berakhir, harap lakukan login terlebih dahulu\"\n}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2040,
+        100
+      ],
+      "id": "312ca72c-2bae-4dd9-a93e-445d62b7652f",
+      "name": "Response token exp"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"harap lakukan login terlebih dahulu\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1100,
+        320
+      ],
+      "id": "8defbe8b-81ff-45af-a39f-bf308f4c93e7",
+      "name": "Response token isEmpty"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "file0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        -500
+      ],
+      "id": "2e4b75a1-df83-4156-ae18-795e7a93cfe4",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst fullText = items.map(item => item.json.text || \"\").join(\" \");\n\n// Cari item yang punya properti fileName\nconst fileNameItem = items.find(item => item.json.fileName);\nconst fileName = fileNameItem?.json.fileName || \"unknown.pdf\";\n\nconst chunkSize = 500;\nconst overlap = 100;\nconst chunks = [];\n\nfor (let i = 0; i < fullText.length; i += chunkSize - overlap) {\n  const chunk = fullText.slice(i, i + chunkSize);\n  chunks.push({\n    json: {\n      text: chunk,\n      metadata: {\n        source: \"shared_pdf\",\n        filename: fileName,\n        uploadedAt: new Date().toISOString()\n      }\n    }\n  });\n}\n\nreturn chunks;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2260,
+        -180
+      ],
+      "id": "ce688d53-7f1a-4b85-b47e-c0a80504f82a",
+      "name": "Split PDF into Chunks"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2680,
+        -20
+      ],
+      "id": "2672c397-270a-4d0b-82a0-dd248341682d",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "kFfL5vlfaWFP4luN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.textSplitterTokenSplitter",
+      "typeVersion": 1,
+      "position": [
+        2820,
+        200
+      ],
+      "id": "63c2b0bd-1523-4fee-8a0e-944560eba837",
+      "name": "Token Splitter"
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.text }}",
+        "options": {}
+      },
+      "id": "59995ddb-c203-4056-8ae9-e81945d86182",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        2820,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "file_pdf",
+          "mode": "list",
+          "cachedResultName": "file_pdf"
+        },
+        "options": {
+          "collectionConfig": ""
+        }
+      },
+      "id": "6f363158-2aa5-44bf-99ed-bebd51720f3f",
+      "name": "Qdrant Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "position": [
+        2700,
+        -180
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "credentials": {
+        "qdrantApi": {
+          "id": "UIxsFAEU14wSNUX7",
+          "name": "Fix QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f29be43a-50cf-42e3-b518-ea7380a3553b",
+              "name": "fileName",
+              "value": "={{ $binary.file0.fileName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1400,
+        -260
+      ],
+      "id": "5b0b58d8-cf7a-45ab-87dc-0cd926932a20",
+      "name": "fileName parameter"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "token",
+              "value": "={{ $json.headers[\"authorization\"] ? $json.headers[\"authorization\"].replace(\"Bearer \", \"\").trim() : '' }}"
+            },
+            {
+              "value": "={{ $binary.file0 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6c90a78f-2490-448f-97dd-7439a70665a5",
+      "name": "tokenInput",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1100,
+        -200
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1640,
+        -400
+      ],
+      "id": "9d8f10c7-767c-478f-ae94-1e688add8c58",
+      "name": "Merge PDF"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1840,
+        -160
+      ],
+      "id": "f145611c-ba2c-4480-9069-dd64d3d0eb1c",
+      "name": "Merge wth token"
+    },
+    {
+      "parameters": {
+        "content": "\npakai RAG dan Qdrant Vector Store untuk menyimpan pdf",
+        "height": 80,
+        "width": 200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2000,
+        -500
+      ],
+      "typeVersion": 1,
+      "id": "26ee939a-d385-4fe9-806c-8484f52e9b8a",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "text",
+              "value": "={{ $json.text }}"
+            },
+            {
+              "name": "source",
+              "value": "={{ $json.metadata.source }}"
+            },
+            {
+              "name": "fileName",
+              "value": "={{ $json.metadata.filename }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "32481893-7ef5-4d7c-aa23-295c62e8383b",
+      "name": "pdf chunks",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2460,
+        -180
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    text: $json.text,\n    metadata: {\n      source: $json.source,\n      filename: $json.fileName\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        -640
+      ],
+      "id": "566118dc-d578-44fc-a9b8-05b2b1548ca7",
+      "name": "formatin code"
+    },
+    {
+      "parameters": {
+        "jsCode": "const cleanText = ($json.text || \"\")\n  .replace(/[^\\x00-\\x7F]/g, \"\") // hapus karakter non-ASCII\n  .replace(/\\s+/g, \" \")         // normalisasi spasi\n\nreturn [{\n  json: {\n    text: cleanText,\n    metadata: $json.metadata\n  }\n}]\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2440,
+        -640
+      ],
+      "id": "ea99c029-6073-4fd7-9a26-e74580f88149",
+      "name": "filter karakter Unicode"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": true,\n  \"message\": \"dokumen anda telah terupload\"\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        3060,
+        -180
+      ],
+      "id": "83b4d9f3-4208-40b2-8c1e-d6f8eba9281b",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "JWT": {
+      "main": [
+        [
+          {
+            "node": "validation exp token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "tokenInput",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "fileName parameter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isToken?": {
+      "main": [
+        [
+          {
+            "node": "JWT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Response token isEmpty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "validation exp token": {
+      "main": [
+        [
+          {
+            "node": "Merge wth token",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "isToken exp?": {
+      "main": [
+        [
+          {
+            "node": "Split PDF into Chunks",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Response token exp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Merge PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Token Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split PDF into Chunks": {
+      "main": [
+        [
+          {
+            "node": "pdf chunks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fileName parameter": {
+      "main": [
+        [
+          {
+            "node": "Merge PDF",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "tokenInput": {
+      "main": [
+        [
+          {
+            "node": "isToken?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge PDF": {
+      "main": [
+        [
+          {
+            "node": "Merge wth token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge wth token": {
+      "main": [
+        [
+          {
+            "node": "isToken exp?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pdf chunks": {
+      "main": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "formatin code": {
+      "main": [
+        [
+          {
+            "node": "filter karakter Unicode",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter karakter Unicode": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "26c81da1-8fc2-4329-9308-537ebdd4e1a2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d4e633e404e6552a6e20f7b9de445e52a35184dfa4ba0f40e2edcf4e8a606373"
+  },
+  "id": "dAtsqTOSdt7BGubY",
+  "tags": [
+    {
+      "createdAt": "2025-07-04T03:38:46.429Z",
+      "updatedAt": "2025-07-04T03:38:46.429Z",
+      "id": "huPUZkVM0WOYriWi",
+      "name": "Tsel AI Lab"
+    }
+  ]
+}

@@ -1,0 +1,1005 @@
+{
+  "name": "TSEL-AI-LAB",
+  "nodes": [
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "sessionId",
+              "value": "={{ $('JWT').item.json.payload.id }}"
+            },
+            {
+              "name": "chatInput",
+              "value": "={{ $('chatInput').item.json.chatInput }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c3619c07-38f3-45ac-90c1-49602df5a1a7",
+      "name": "sessionData",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2840,
+        20
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "options": {
+          "groupMessages": true
+        }
+      },
+      "id": "7248ac85-6c0e-493a-9832-77c3bb043dcb",
+      "name": "conversationStore",
+      "type": "@n8n/n8n-nodes-langchain.memoryManager",
+      "position": [
+        3060,
+        20
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        3060,
+        180
+      ],
+      "id": "2bc780c2-bf4e-464c-b94f-808f7b617072",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\nconst lastItem = allItems[allItems.length - 1];\n\nif (lastItem && Array.isArray(lastItem.json.messages)) {\n  const messages = lastItem.json.messages;\n  const count = messages.length;\n\n  if (count === 0) return [{ json: { message: \"\" } }];\n\n  const extractFirstLine = (text) => {\n    if (!text) return \"\";\n    return text.split('\\n')[0].replace(/^Input from user:\\s*/, '');\n  };\n\n  const trimEndNewline = (text) => {\n    if (!text) return \"\";\n    return text.replace(/\\n+$/, '');\n  };\n\n  const selectedMessages = (count === 1) ? [messages[0]] : messages.slice(-1);\n\n  const combinedMessage = selectedMessages.map((msg, idx) => {\n    return `Message ${idx + 1}:\\nhuman: ${extractFirstLine(msg.human)}\\nai: ${trimEndNewline(msg.ai)}`;\n  }).join('\\n\\n');\n\n  return [{ json: { messages: combinedMessage } }];\n}\n\nreturn [{ json: { messages: \"\" } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        20
+      ],
+      "id": "c3b14e7a-57b1-45d7-b828-b2ce03029c6e",
+      "name": "latestContext"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Tugas kamu adalah mengklasifikasikan satu kalimat pesan dari pengguna menjadi dua label:\n- \"intention\": \"generate\", \"chat\", atau \"other\"\n- \"typeData\": \"image\" jika generate, selain itu \"text\"\n\nContoh:\n- \"buatkan grafik penjualan\" → {\"intention\": \"generate\", \"typeData\": \"image\"}\n- \"apa itu BUMN?\" → {\"intention\": \"chat\", \"typeData\": \"text\"}\n- \"halo\" → {\"intention\": \"other\", \"typeData\": \"text\"}\n\nJawab hanya dalam format JSON valid satu baris tanpa komentar tambahan seperti:\n{\"intention\": \"generate\", \"typeData\": \"image\"}\n",
+        "hasOutputParser": true
+      },
+      "id": "4abad91f-f000-448a-83e6-054d8a1e63ef",
+      "name": "inputProcessor",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        3540,
+        20
+      ],
+      "typeVersion": 1.6,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.intention }}",
+                    "rightValue": "chat",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5d646d3a-eb1e-4b30-a286-bdb970237a93"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "chat"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f04e3d4a-c5d9-438f-854d-064164617867",
+                    "leftValue": "={{ $json.output.intention }}",
+                    "rightValue": "ganerate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ganerate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f755e53c-024d-4238-a94c-1d738048a16e",
+                    "leftValue": "={{ $json.output.intention }}",
+                    "rightValue": "other",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "other"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        3900,
+        20
+      ],
+      "id": "fd4c3060-6d7a-4198-a3ef-31b235afa7b1",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df66f11f-998d-4352-84f8-411cac3fc70e",
+              "name": "prompt",
+              "value": "=1. **Aturan**\n\n* Berkomunikasilah secara formal, jelas, dan sopan setiap saat.\n* Bersikap ringkas dan tepat, hindari detail yang tidak perlu.\n* Pertahankan nada yang positif dan profesional sebagai asisten yang andal dan berpengetahuan.\n* Hormati batasan pengguna dan hindari topik yang dilarang atau tidak pantas.\n* Buat percakapan tetap menarik dengan mendorong partisipasi pengguna, namun saat meminta klarifikasi atau informasi tambahan, ajukan hanya satu pertanyaan terfokus agar tidak membingungkan pengguna. Hindari mengakhiri dialog secara tiba-tiba.\n* Ikuti instruksi pengguna dengan tepat.\n* Jangan menyertakan teks atau penjelasan tambahan kecuali diminta secara eksplisit.\n* Gunakan bahasa indonesia sebagai bahasa utama\n\n2. **Instruksi Tanggapan**\n\n* Analisis pesan dan riwayat percakapan untuk menjaga konteks dan kesinambungan.\n* Jika pengulangan diminta, kembalikan pesan persis seperti yang diberikan. Jika tidak, berikan tanggapan yang jelas dan sesuai berdasarkan maksud dan konteks.\n* Jika pesan tidak jelas, berikan satu interpretasi yang masuk akal dan minta klarifikasi sambil menjaga percakapan tetap aktif.\n* Gunakan bahasa indonesia sebagai bahasa utama\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4200,
+        -220
+      ],
+      "id": "65713bdc-20e6-4fa5-ad63-befda56d65f7",
+      "name": "chat prompt"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df66f11f-998d-4352-84f8-411cac3fc70e",
+              "name": "prompt",
+              "value": "=1. **Instruksi Umum**\n   Buatlah prompt yang menghasilkan hanya satu respons tanpa komentar dan tanpa baris baru. Berdasarkan input yang diberikan, hasilkan deskripsi visual yang mendetail dari permintaan secara jelas dan koheren. Hindari penggunaan tanda kutip, apostrof, atau tanda baca lainnya.\n\n2. **Spesifikasi Visual**\n\n* **Komposisi**: pertahankan tata letak yang seimbang dan harmonis di mana semua elemen (gambar, bentuk, dan teks) bekerja secara selaras. Pastikan tidak ada bagian gambar yang terasa penuh sesak, dan desain mengarahkan perhatian pemirsa secara alami. Gunakan pendekatan minimalis dengan menghindari detail berlebihan atau gangguan visual.\n\n* **Palet Warna**: pilih skema warna yang melengkapi tema secara keseluruhan dan meningkatkan suasana. Warna harus enak dipandang dan bekerja secara harmonis. Gunakan tidak lebih dari 3–4 warna utama untuk menjaga kesederhanaan dan konsistensi, serta memastikan warna tidak mendominasi desain.\n\n* **Kejelasan Visual**: gambar harus tajam dan jelas, dengan semua elemen yang dapat dibaca dan mudah diinterpretasikan. Hindari visual yang buram atau pecah. Pertahankan kontras yang kuat antar elemen kunci untuk penekanan dan kejelasan visual.\n\n* **Ukuran dan Resolusi Gambar**: gambar harus disesuaikan untuk memenuhi kebutuhan tampilan standar (misalnya media sosial, posting web). Pastikan resolusinya cukup tinggi agar tetap jelas baik di perangkat desktop maupun seluler. Gambar harus mempertahankan kualitas visual tanpa kehilangan ketajaman atau detail saat dilihat di berbagai layar.\n\n* **Daya Tarik Estetika**: usahakan desain yang tidak hanya fungsional tetapi juga menarik secara visual. Gaya keseluruhan harus modern, bersih, dan enak dipandang, dengan tampilan yang konsisten sesuai dengan suasana atau pesan yang dimaksud. Pastikan desain menyenangkan secara visual dan membangkitkan respons yang diinginkan dari pemirsa.\n\n* **Keseimbangan Visual**: pastikan elemen dalam gambar memiliki jarak yang proporsional, tanpa bagian yang terasa terlalu berat atau terlalu ringan. Ciptakan alur fokus yang alami, membimbing pandangan pemirsa melalui komposisi tanpa gangguan.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4200,
+        20
+      ],
+      "id": "0dfcee20-2ba6-4c1d-9b51-8f97a93731ce",
+      "name": "ganerate prompt"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df66f11f-998d-4352-84f8-411cac3fc70e",
+              "name": "prompt",
+              "value": "=1. **Aturan**\n\n* Selalu berkomunikasi secara formal, jelas, dan sopan.\n* Bersikap ringkas dan tepat, hindari detail yang tidak perlu.\n* Pertahankan nada yang positif dan profesional sebagai asisten yang andal dan berpengetahuan.\n* Hormati batasan pengguna dan hindari membahas topik yang dilarang atau tidak pantas.\n* Jadikan percakapan tetap menarik dengan mendorong partisipasi pengguna, namun saat meminta klarifikasi atau informasi tambahan, ajukan hanya satu pertanyaan terfokus agar tidak membingungkan. Hindari mengakhiri percakapan secara tiba-tiba.\n* Ikuti instruksi pengguna secara tepat.\n* Jangan menyertakan teks atau penjelasan tambahan kecuali diminta secara eksplisit.\n\n2. **Instruksi Umum**\n\n* Jika sebuah pesan tidak jelas atau kurang detail, berikan respons berdasarkan pemahaman terbaik Anda sebagai saran, dan dengan sopan minta konfirmasi atau detail tambahan jika itu bukan maksud pengguna.\n* Jika permintaan tidak pantas atau tidak relevan, tolak dengan sopan dan jelas sambil tetap menjaga rasa hormat dan profesionalisme, lalu undang pengguna untuk mengajukan permintaan yang valid.\n* Selalu ikuti aturan yang telah ditetapkan untuk menjaga profesionalisme dan ketepatan.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4220,
+        260
+      ],
+      "id": "67e725f5-7ec4-46c5-bfee-568c9f2c2693",
+      "name": "other prompt"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df66f11f-998d-4352-84f8-411cac3fc70e",
+              "name": "prompt",
+              "value": "={{ $json.prompt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5000,
+        -40
+      ],
+      "id": "52b2e4d5-6afb-4952-babb-9c54a02e8cb3",
+      "name": "build prompt"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "==Input dari pengguna: {{ $('Webhook').item.json.body.chatInput }}\n\n{{ $json.prompt }}\n4. **Penggunaan Tools**\n\n* [PERINGATAN: Dilarang memberikan jawaban berbasis pengetahuan umum jika tools tersedia. WAJIB gunakan tools RAG terlebih dahulu.]\n\n* Jika hasil dari tools tidak ditemukan (tidak relevan, kosong, atau confidence rendah), jawab dengan: \"Maaf saya tidak bisa menemukan jawaban dari dokumen.\"",
+        "options": {
+          "systemMessage": "==Anda chatbot profesional untuk perusahaan yang dirancang untuk membantu pengguna dengan komunikasi yang jelas, sopan, dan akurat. Anda memberikan respons teks yang informatif dan menghasilkan gambar hanya jika diminta secara eksplisit oleh pengguna. Gunakan riwayat percakapan yang tersedia untuk menjaga konteks dan kesinambungan. Patuhi aturan perusahaan secara ketat untuk memastikan interaksi yang tepat dan aman.Anda dapat mengobrol dengan saya untuk mendapatkan jawaban dan membuat gambar khusus berdasarkan instruksi Anda.Prioritaskan pesan relevan yang paling baru jika terdapat beberapa referensi sebelumnya. Balas dalam Bahasa Indonesia untuk semua permintaan teks (chat, otherdan generate). Jaga agar respons tetap sependek mungkin tanpa mengurangi kejelasan atau kelancaran interaksi. Jangan memaksakan interaksi lebih dari yang diperlukan untuk memberikan jawaban yang jelas."
+        }
+      },
+      "id": "e5af68d6-886f-4f29-af64-9425371501d4",
+      "name": "ChatCore",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        5220,
+        -40
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        5080,
+        160
+      ],
+      "id": "2d0a659a-ba95-44ea-ae15-0219d8c9c8ae",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "AMlVjwSnnDLaS6Bh",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('sessionData').item.json.sessionId }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        5220,
+        160
+      ],
+      "id": "88c705ca-e205-47af-82f0-44b4f306e457",
+      "name": "Simple Memory2"
+    },
+    {
+      "parameters": {
+        "content": "\npakai RAG dan Qdrant Vector Store untuk menyimpan pdf",
+        "height": 80,
+        "width": 200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1680,
+        -460
+      ],
+      "typeVersion": 1,
+      "id": "961941d7-cd4c-43e5-bdf2-c3ea31a36713",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        5580,
+        -40
+      ],
+      "id": "28858bad-e7ba-43b3-a8b1-99c4f4d0a6ba",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "decode",
+        "token": "={{ $json.token }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jwt",
+      "typeVersion": 1,
+      "position": [
+        1700,
+        40
+      ],
+      "id": "c722eb73-1c56-4286-8394-3eec7885f3c8",
+      "name": "JWT",
+      "credentials": {
+        "jwtAuth": {
+          "id": "wQv7Mmg2TdsmIkxQ",
+          "name": "JWT Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "e5a15a44-a6e5-4f76-b096-73ec34a96d90",
+        "responseMode": "responseNode",
+        "options": {
+          "binaryPropertyName": "file"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1500,
+        -440
+      ],
+      "id": "b492e24c-a523-467e-811e-d149d13c7404",
+      "name": "Webhook",
+      "webhookId": "e5a15a44-a6e5-4f76-b096-73ec34a96d90"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "chatInput",
+              "value": "={{ $('Webhook').item.json.body.chatInput }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "47e3e0b8-6e3b-4d8d-bedf-fcef6f170714",
+      "name": "chatInput",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2400,
+        20
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6008934a-29d4-4fa0-8da9-1d17a49351cb",
+              "leftValue": "={{ $json.token }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1520,
+        40
+      ],
+      "id": "30d5e1b6-54d2-443c-afaf-67e92bf8fd53",
+      "name": "isToken?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = Math.floor(Date.now() / 1000);\nconst exp = $json.payload.exp;\nreturn [\n  {\n    json: {\n      isExpired: now > exp,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1940,
+        40
+      ],
+      "id": "02be92c2-00f9-4668-9e4f-2206ed577388",
+      "name": "validation exp token"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0a86cff5-bf94-432f-839c-ae3e232b4c28",
+              "leftValue": "={{ $json.isExpired }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2160,
+        40
+      ],
+      "id": "9f41947d-e39c-4fb1-9044-39a333943ab6",
+      "name": "isToken exp?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"Sesi anda telah berakhir, harap lakukan login terlebih dahulu\"\n}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2160,
+        300
+      ],
+      "id": "0acd245e-56fe-4fc4-a482-3a96751827b6",
+      "name": "Response token exp"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"harap lakukan login terlebih dahulu\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1500,
+        320
+      ],
+      "id": "cce7ce0f-263e-426e-be84-6266af08d708",
+      "name": "Response token isEmpty"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "token",
+              "value": "={{ $json.headers[\"authorization\"] ? $json.headers[\"authorization\"].replace(\"Bearer \", \"\").trim() : '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9ff7dc4f-4cbc-4e7d-9a4c-96cc1e60115e",
+      "name": "tokenInput",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1500,
+        -200
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        5360,
+        320
+      ],
+      "id": "5c0aabd8-5116-4174-a977-37e49f30a20e",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "kFfL5vlfaWFP4luN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [$input.last()];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2620,
+        20
+      ],
+      "id": "862a9e64-3a28-4d8b-b05c-c6e883a02076",
+      "name": "lastPrompt"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "gunakan tools ini untuk mencari data terkait yang di tanyakan oleh user",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "file_pdf",
+          "mode": "list",
+          "cachedResultName": "file_pdf"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        5360,
+        160
+      ],
+      "id": "e8521d5d-8888-452d-bbb4-bb218845b9de",
+      "name": "Qdrant Vector Store2",
+      "credentials": {
+        "qdrantApi": {
+          "id": "UIxsFAEU14wSNUX7",
+          "name": "Fix QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"Maaf saya belum bisa untuk melakukan generate gambar\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        4420,
+        20
+      ],
+      "id": "5b0c9e88-31d3-45f5-a550-b3d222a39dc7",
+      "name": "Respond img prompt"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3540,
+        200
+      ],
+      "id": "a4ecb837-349c-4d9e-983c-4a6cb30d8eb4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "sYYc1quvDf0jlJaQ",
+          "name": "rpoernomo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        440
+      ],
+      "id": "0fbfb075-3986-4350-b819-891496950370",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "AMlVjwSnnDLaS6Bh",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"intention\": \"chat\",\n  \"typeData\": \"text\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3700,
+        200
+      ],
+      "id": "86489b62-70c5-4cd9-9688-2b66b555f09a",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "sessionData": {
+      "main": [
+        [
+          {
+            "node": "conversationStore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "conversationStore",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "conversationStore": {
+      "main": [
+        [
+          {
+            "node": "latestContext",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "latestContext": {
+      "main": [
+        [
+          {
+            "node": "inputProcessor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "inputProcessor": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "chat prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ganerate prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "other prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ganerate prompt": {
+      "main": [
+        [
+          {
+            "node": "Respond img prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "chat prompt": {
+      "main": [
+        [
+          {
+            "node": "build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "other prompt": {
+      "main": [
+        [
+          {
+            "node": "build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "build prompt": {
+      "main": [
+        [
+          {
+            "node": "ChatCore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ChatCore",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "ChatCore",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatCore": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JWT": {
+      "main": [
+        [
+          {
+            "node": "validation exp token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "tokenInput",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "chatInput": {
+      "main": [
+        [
+          {
+            "node": "lastPrompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isToken?": {
+      "main": [
+        [
+          {
+            "node": "JWT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Response token isEmpty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "validation exp token": {
+      "main": [
+        [
+          {
+            "node": "isToken exp?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isToken exp?": {
+      "main": [
+        [
+          {
+            "node": "chatInput",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Response token exp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tokenInput": {
+      "main": [
+        [
+          {
+            "node": "isToken?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store2",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "lastPrompt": {
+      "main": [
+        [
+          {
+            "node": "sessionData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store2": {
+      "ai_tool": [
+        [
+          {
+            "node": "ChatCore",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond img prompt": {
+      "main": [
+        []
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "inputProcessor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "inputProcessor",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "36cda77e-26ac-47bd-8758-0c59d56aa982",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d4e633e404e6552a6e20f7b9de445e52a35184dfa4ba0f40e2edcf4e8a606373"
+  },
+  "id": "PXupT0w9bo8X9XC1",
+  "tags": [
+    {
+      "createdAt": "2025-07-04T03:38:46.429Z",
+      "updatedAt": "2025-07-04T03:38:46.429Z",
+      "id": "huPUZkVM0WOYriWi",
+      "name": "Tsel AI Lab"
+    }
+  ]
+}
