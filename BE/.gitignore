@@ -134,5 +134,5 @@ dist
 .pnp.*
 
 #Database Tamplate
-.sql
-db_template.sql
+# .sql
+# db_template.sql

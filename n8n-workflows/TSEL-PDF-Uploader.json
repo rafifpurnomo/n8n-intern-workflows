@@ -1,5 +1,5 @@
 {
-  "name": "PDF-Validation",
+  "name": "TSEL-PDF-Uploader",
   "nodes": [
     {
       "parameters": {
@@ -9,8 +9,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        860,
-        -400
+        720,
+        -420
       ],
       "typeVersion": 1,
       "id": "1f5f573d-ab2f-4551-a134-cd0f3f6c4225",
@@ -36,25 +36,6 @@
           "name": "JWT Auth account"
         }
       }
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "673c3b44-570f-4e67-b8b4-1837a69b4e2a",
-        "responseMode": "responseNode",
-        "options": {
-          "binaryPropertyName": "file"
-        }
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [
-        1100,
-        -420
-      ],
-      "id": "fffe1d03-ead1-4201-bfb5-5a1a17c03081",
-      "name": "Webhook",
-      "webhookId": "673c3b44-570f-4e67-b8b4-1837a69b4e2a"
     },
     {
       "parameters": {
@@ -181,7 +162,7 @@
       "typeVersion": 1,
       "position": [
         1400,
-        -500
+        -520
       ],
       "id": "2e4b75a1-df83-4156-ae18-795e7a93cfe4",
       "name": "Extract from File"
@@ -347,21 +328,6 @@
     },
     {
       "parameters": {
-        "content": "\npakai RAG dan Qdrant Vector Store untuk menyimpan pdf",
-        "height": 80,
-        "width": 200
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2000,
-        -500
-      ],
-      "typeVersion": 1,
-      "id": "26ee939a-d385-4fe9-806c-8484f52e9b8a",
-      "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
         "keepOnlySet": true,
         "values": {
           "string": [
@@ -397,11 +363,12 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2240,
+        2300,
         -640
       ],
       "id": "566118dc-d578-44fc-a9b8-05b2b1548ca7",
-      "name": "formatin code"
+      "name": "formatin code",
+      "disabled": true
     },
     {
       "parameters": {
@@ -414,7 +381,8 @@
         -640
       ],
       "id": "ea99c029-6073-4fd7-9a26-e74580f88149",
-      "name": "filter karakter Unicode"
+      "name": "filter karakter Unicode",
+      "disabled": true
     },
     {
       "parameters": {
@@ -432,6 +400,25 @@
       ],
       "id": "83b4d9f3-4208-40b2-8c1e-d6f8eba9281b",
       "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "post-pdf",
+        "responseMode": "responseNode",
+        "options": {
+          "binaryPropertyName": "file"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        -440
+      ],
+      "id": "fffe1d03-ead1-4201-bfb5-5a1a17c03081",
+      "name": "Webhook pdf trigger",
+      "webhookId": "673c3b44-570f-4e67-b8b4-1837a69b4e2a"
     }
   ],
   "pinData": {},
@@ -441,27 +428,6 @@
         [
           {
             "node": "validation exp token",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Webhook": {
-      "main": [
-        [
-          {
-            "node": "tokenInput",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Extract from File",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "fileName parameter",
             "type": "main",
             "index": 0
           }
@@ -651,13 +617,34 @@
       "main": [
         []
       ]
+    },
+    "Webhook pdf trigger": {
+      "main": [
+        [
+          {
+            "node": "tokenInput",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "fileName parameter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "26c81da1-8fc2-4329-9308-537ebdd4e1a2",
+  "versionId": "efb61834-e7d1-4ec8-9ed9-4d1770959d73",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d4e633e404e6552a6e20f7b9de445e52a35184dfa4ba0f40e2edcf4e8a606373"
