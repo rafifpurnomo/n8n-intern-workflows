@@ -18,12 +18,12 @@
         },
         "options": {}
       },
-      "id": "c3619c07-38f3-45ac-90c1-49602df5a1a7",
+      "id": "48781bc1-b2e4-4959-a594-05c4890e1db6",
       "name": "sessionData",
       "type": "n8n-nodes-base.set",
       "position": [
-        2600,
-        20
+        -40,
+        1260
       ],
       "typeVersion": 2
     },
@@ -33,12 +33,12 @@
           "groupMessages": true
         }
       },
-      "id": "7248ac85-6c0e-493a-9832-77c3bb043dcb",
+      "id": "ccf7db87-7089-4d98-8217-6481df063c99",
       "name": "conversationStore",
       "type": "@n8n/n8n-nodes-langchain.memoryManager",
       "position": [
-        2760,
-        20
+        120,
+        1260
       ],
       "typeVersion": 1.1
     },
@@ -47,10 +47,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        2760,
-        220
+        120,
+        1460
       ],
-      "id": "2bc780c2-bf4e-464c-b94f-808f7b617072",
+      "id": "1a3a20c3-c744-4926-83f7-71af79e0cb37",
       "name": "Simple Memory"
     },
     {
@@ -60,10 +60,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3040,
-        20
+        400,
+        1260
       ],
-      "id": "c3b14e7a-57b1-45d7-b828-b2ce03029c6e",
+      "id": "9451b443-92e9-4094-9451-9d9c2a80978a",
       "name": "latestContext"
     },
     {
@@ -72,12 +72,12 @@
         "text": "=Tugas kamu adalah mengklasifikasikan satu kalimat pesan dari pengguna menjadi dua label:\n- \"intention\": \"generate\", \"chat\", atau \"other\"\n- \"typeData\": \"image\" jika generate, selain itu \"text\"\n\nContoh:\n- \"buatkan grafik penjualan\" → {\"intention\": \"generate\", \"typeData\": \"image\"}\n- \"apa itu BUMN?\" → {\"intention\": \"chat\", \"typeData\": \"text\"}\n- \"halo\" → {\"intention\": \"other\", \"typeData\": \"text\"}\n\nJawab hanya dalam format JSON valid satu baris tanpa komentar tambahan seperti:\n{\"intention\": \"generate\", \"typeData\": \"image\"}\n",
         "hasOutputParser": true
       },
-      "id": "4abad91f-f000-448a-83e6-054d8a1e63ef",
+      "id": "81d670a1-e4e2-47a9-bb6d-a3d87544bc71",
       "name": "inputProcessor",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "position": [
-        3540,
-        -1200
+        900,
+        40
       ],
       "typeVersion": 1.6,
       "alwaysOutputData": false,
@@ -168,10 +168,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        2640,
-        -1240
+        0,
+        0
       ],
-      "id": "fd4c3060-6d7a-4198-a3ef-31b235afa7b1",
+      "id": "b85a7b6b-434a-4e8c-9d8b-bd21f6ed8dfb",
       "name": "Switch",
       "disabled": true
     },
@@ -182,7 +182,7 @@
             {
               "id": "df66f11f-998d-4352-84f8-411cac3fc70e",
               "name": "prompt",
-              "value": "=1. **Aturan**\n\n* Berkomunikasilah secara formal, jelas, dan sopan setiap saat.\n* Bersikap ringkas dan tepat, hindari detail yang tidak perlu.\n* Pertahankan nada yang positif dan profesional sebagai asisten yang andal dan berpengetahuan.\n* Hormati batasan pengguna dan hindari topik yang dilarang atau tidak pantas.\n* Buat percakapan tetap menarik dengan mendorong partisipasi pengguna, namun saat meminta klarifikasi atau informasi tambahan, ajukan hanya satu pertanyaan terfokus agar tidak membingungkan pengguna. Hindari mengakhiri dialog secara tiba-tiba.\n* Ikuti instruksi pengguna dengan tepat.\n* Jangan menyertakan teks atau penjelasan tambahan kecuali diminta secara eksplisit.\n* Gunakan bahasa indonesia sebagai bahasa utama\n\n2. **Instruksi Tanggapan**\n\n* Analisis pesan dan riwayat percakapan untuk menjaga konteks dan kesinambungan.\n* Jika pengulangan diminta, kembalikan pesan persis seperti yang diberikan. Jika tidak, berikan tanggapan yang jelas dan sesuai berdasarkan maksud dan konteks.\n* Jika pesan tidak jelas, berikan satu interpretasi yang masuk akal dan minta klarifikasi sambil menjaga percakapan tetap aktif.\n* Gunakan bahasa indonesia sebagai bahasa utama\n\n3. **Penggunaan Tools**\n\n* [PERINGATAN: Dilarang memberikan jawaban berbasis pengetahuan umum jika tools tersedia. WAJIB gunakan tools RAG terlebih dahulu.]\n\n* Jika hasil dari tools tidak ditemukan (tidak relevan, kosong, atau confidence rendah), jawab dengan: \"Maaf saya tidak bisa menemukan jawaban dari dokumen.\"",
+              "value": "=1. **Aturan**\n\n* Berkomunikasilah secara formal, jelas, dan sopan setiap saat.\n* Bersikap ringkas dan tepat, hindari detail yang tidak perlu.\n* Pertahankan nada yang positif dan profesional sebagai asisten yang andal dan berpengetahuan.\n* Hormati batasan pengguna dan hindari topik yang dilarang atau tidak pantas.\n* Buat percakapan tetap menarik dengan mendorong partisipasi pengguna, namun saat meminta klarifikasi atau informasi tambahan, ajukan hanya satu pertanyaan terfokus agar tidak membingungkan pengguna. Hindari mengakhiri dialog secara tiba-tiba.\n* Ikuti instruksi pengguna dengan tepat.\n* Jangan menyertakan teks atau penjelasan tambahan kecuali diminta secara eksplisit.\n* Gunakan bahasa indonesia sebagai bahasa utama\n\n2. **Instruksi Tanggapan**\n\n* Analisis pesan dan riwayat percakapan untuk menjaga konteks dan kesinambungan.\n* Jika pengulangan diminta, kembalikan pesan persis seperti yang diberikan. Jika tidak, berikan tanggapan yang jelas dan sesuai berdasarkan maksud dan konteks.\n* Jika pesan tidak jelas, berikan satu interpretasi yang masuk akal dan minta klarifikasi sambil menjaga percakapan tetap aktif.\n* Gunakan bahasa indonesia sebagai bahasa utama\n\n3. **Penggunaan Tools**\n\n* Dilarang memberikan jawaban berbasis pengetahuan umum jika tools tersedia. WAJIB gunakan tools RAG terlebih dahulu.\n* Jika hasil dari tools tidak ditemukan (tidak relevan, kosong, atau confidence rendah), jawab dengan: \"Maaf saya tidak bisa menemukan jawaban dari dokumen.\"",
               "type": "string"
             }
           ]
@@ -192,10 +192,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3220,
-        20
+        580,
+        1260
       ],
-      "id": "65713bdc-20e6-4fa5-ad63-befda56d65f7",
+      "id": "a4716c96-1d3b-4b6e-a55b-90a71d5ea087",
       "name": "chat prompt"
     },
     {
@@ -215,10 +215,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2940,
-        -1240
+        300,
+        0
       ],
-      "id": "0dfcee20-2ba6-4c1d-9b51-8f97a93731ce",
+      "id": "1f6b009e-2e02-4903-b991-21a58615bb01",
       "name": "ganerate prompt",
       "disabled": true
     },
@@ -239,10 +239,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2960,
-        -1000
+        320,
+        240
       ],
-      "id": "67e725f5-7ec4-46c5-bfee-568c9f2c2693",
+      "id": "78348a7a-ade6-4fa1-95ce-d366869d3499",
       "name": "other prompt",
       "disabled": true
     },
@@ -263,26 +263,26 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3400,
-        20
+        760,
+        1260
       ],
-      "id": "52b2e4d5-6afb-4952-babb-9c54a02e8cb3",
+      "id": "e4325bc6-ddd0-4cf3-972d-cbb0e4142e32",
       "name": "build prompt"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "==Input dari pengguna: {{ $('chatInput').item.json.chatInput }}\n\n{{ $json.prompt }}",
+        "text": "=Input dari pengguna: {{ $('chatInput').item.json.chatInput }}\n\n{{ $json.prompt }}",
         "options": {
-          "systemMessage": "==Anda chatbot profesional untuk perusahaan yang dirancang untuk membantu pengguna dengan komunikasi yang jelas, sopan, dan akurat. Anda memberikan respons teks yang informatif dan menghasilkan gambar hanya jika diminta secara eksplisit oleh pengguna. Gunakan riwayat percakapan yang tersedia untuk menjaga konteks dan kesinambungan. Patuhi aturan perusahaan secara ketat untuk memastikan interaksi yang tepat dan aman.Anda dapat mengobrol dengan saya untuk mendapatkan jawaban dan membuat gambar khusus berdasarkan instruksi Anda.Prioritaskan pesan relevan yang paling baru jika terdapat beberapa referensi sebelumnya. Balas dalam Bahasa Indonesia untuk semua permintaan teks (chat, otherdan generate). Jaga agar respons tetap sependek mungkin tanpa mengurangi kejelasan atau kelancaran interaksi. Jangan memaksakan interaksi lebih dari yang diperlukan untuk memberikan jawaban yang jelas."
+          "systemMessage": "=Anda chatbot profesional untuk perusahaan yang dirancang untuk membantu pengguna dengan komunikasi yang jelas, sopan, dan akurat. Anda memberikan respons teks yang informatif dan menghasilkan gambar hanya jika diminta secara eksplisit oleh pengguna. Gunakan riwayat percakapan yang tersedia untuk menjaga konteks dan kesinambungan. Patuhi aturan perusahaan secara ketat untuk memastikan interaksi yang tepat dan aman.Anda dapat mengobrol dengan saya untuk mendapatkan jawaban dan membuat gambar khusus berdasarkan instruksi Anda.Prioritaskan pesan relevan yang paling baru jika terdapat beberapa referensi sebelumnya. Balas dalam Bahasa Indonesia untuk semua permintaan teks (chat, otherdan generate). Jaga agar respons tetap sependek mungkin tanpa mengurangi kejelasan atau kelancaran interaksi. Jangan memaksakan interaksi lebih dari yang diperlukan untuk memberikan jawaban yang jelas."
         }
       },
-      "id": "e5af68d6-886f-4f29-af64-9425371501d4",
+      "id": "cf06091e-14ab-418f-a017-059b987acb15",
       "name": "ChatCore",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        3620,
-        20
+        980,
+        1260
       ],
       "typeVersion": 1.9
     },
@@ -293,46 +293,17 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        3480,
-        220
+        740,
+        1500
       ],
-      "id": "2d0a659a-ba95-44ea-ae15-0219d8c9c8ae",
+      "id": "aafa25a9-8dd7-426c-9e49-61198b9814dd",
       "name": "Groq Chat Model",
       "credentials": {
         "groqApi": {
-          "id": "AMlVjwSnnDLaS6Bh",
+          "id": "TUbtLRFNULuqqBte",
           "name": "Groq account"
         }
       }
-    },
-    {
-      "parameters": {
-        "sessionIdType": "customKey",
-        "sessionKey": "={{ $('sessionData').item.json.sessionId }}"
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
-      "position": [
-        3620,
-        220
-      ],
-      "id": "88c705ca-e205-47af-82f0-44b4f306e457",
-      "name": "Simple Memory2"
-    },
-    {
-      "parameters": {
-        "content": "\npakai RAG dan Qdrant Vector Store untuk menyimpan pdf",
-        "height": 80,
-        "width": 200
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1680,
-        -460
-      ],
-      "typeVersion": 1,
-      "id": "961941d7-cd4c-43e5-bdf2-c3ea31a36713",
-      "name": "Sticky Note"
     },
     {
       "parameters": {
@@ -341,10 +312,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        3980,
-        20
+        1340,
+        1260
       ],
-      "id": "28858bad-e7ba-43b3-a8b1-99c4f4d0a6ba",
+      "id": "b7bdd533-d37b-4a62-b4b4-2f024034df27",
       "name": "Respond to Webhook"
     },
     {
@@ -356,14 +327,14 @@
       "type": "n8n-nodes-base.jwt",
       "typeVersion": 1,
       "position": [
-        1740,
-        40
+        -900,
+        1280
       ],
-      "id": "c722eb73-1c56-4286-8394-3eec7885f3c8",
+      "id": "6db01d02-9cf3-490a-be9d-7a1ac501284e",
       "name": "JWT",
       "credentials": {
         "jwtAuth": {
-          "id": "wQv7Mmg2TdsmIkxQ",
+          "id": "DIKYTiCd0YBNntFq",
           "name": "JWT Auth account"
         }
       }
@@ -381,12 +352,12 @@
         },
         "options": {}
       },
-      "id": "47e3e0b8-6e3b-4d8d-bedf-fcef6f170714",
+      "id": "6a536c45-8b2c-412f-b947-5e5d1fabcdf5",
       "name": "chatInput",
       "type": "n8n-nodes-base.set",
       "position": [
-        2320,
-        20
+        -320,
+        1260
       ],
       "typeVersion": 2
     },
@@ -418,10 +389,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1520,
-        40
+        -1120,
+        1280
       ],
-      "id": "30d5e1b6-54d2-443c-afaf-67e92bf8fd53",
+      "id": "696f0cf9-2bae-479d-842e-302a11fdf3b2",
       "name": "isToken?"
     },
     {
@@ -431,10 +402,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1940,
-        40
+        -700,
+        1280
       ],
-      "id": "02be92c2-00f9-4668-9e4f-2206ed577388",
+      "id": "b1c3a801-23f6-4280-ac96-9ae65d876c00",
       "name": "validation exp token"
     },
     {
@@ -465,10 +436,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2160,
-        40
+        -480,
+        1280
       ],
-      "id": "9f41947d-e39c-4fb1-9044-39a333943ab6",
+      "id": "efb1ce26-1d1c-472d-af33-6fc44754681c",
       "name": "isToken exp?"
     },
     {
@@ -482,10 +453,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        2160,
-        300
+        -480,
+        1540
       ],
-      "id": "0acd245e-56fe-4fc4-a482-3a96751827b6",
+      "id": "a00e98ac-5919-4346-8aee-c3967790d302",
       "name": "Response token exp"
     },
     {
@@ -499,10 +470,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        1500,
-        320
+        -1140,
+        1560
       ],
-      "id": "cce7ce0f-263e-426e-be84-6266af08d708",
+      "id": "492db853-8dd4-47a5-8a2d-ffed8f965743",
       "name": "Response token isEmpty"
     },
     {
@@ -518,12 +489,12 @@
         },
         "options": {}
       },
-      "id": "9ff7dc4f-4cbc-4e7d-9a4c-96cc1e60115e",
+      "id": "5bdadb8f-20f0-4dc5-a8bf-5996338dfae0",
       "name": "tokenInput",
       "type": "n8n-nodes-base.set",
       "position": [
-        1500,
-        -200
+        -1140,
+        1040
       ],
       "typeVersion": 2
     },
@@ -532,14 +503,14 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        3760,
-        380
+        1180,
+        1620
       ],
-      "id": "5c0aabd8-5116-4174-a977-37e49f30a20e",
+      "id": "828ee660-0e8e-45e5-ad29-c37cc382fc65",
       "name": "Embeddings Google Gemini1",
       "credentials": {
         "googlePalmApi": {
-          "id": "kFfL5vlfaWFP4luN",
+          "id": "hu7ixQhsS09un4nf",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -551,10 +522,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2460,
-        20
+        -180,
+        1260
       ],
-      "id": "862a9e64-3a28-4d8b-b05c-c6e883a02076",
+      "id": "fee3e10c-26bc-4251-afb2-04983b8c5866",
       "name": "lastPrompt"
     },
     {
@@ -573,15 +544,15 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        3760,
-        220
+        1180,
+        1460
       ],
-      "id": "e8521d5d-8888-452d-bbb4-bb218845b9de",
+      "id": "bb447b0a-2e59-4c05-9b0a-23dc48c4396b",
       "name": "Qdrant Vector Store2",
       "credentials": {
         "qdrantApi": {
-          "id": "UIxsFAEU14wSNUX7",
-          "name": "Fix QdrantApi account"
+          "id": "WvMXTDUfDLp2KASV",
+          "name": "QdrantApi account"
         }
       }
     },
@@ -594,10 +565,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        3160,
-        -1240
+        520,
+        0
       ],
-      "id": "5b0c9e88-31d3-45f5-a550-b3d222a39dc7",
+      "id": "0a789c69-7c6d-49c8-b2eb-2166c0a30983",
       "name": "Respond img prompt",
       "disabled": true
     },
@@ -609,17 +580,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        3540,
-        -1020
+        900,
+        220
       ],
-      "id": "a4ecb837-349c-4d9e-983c-4a6cb30d8eb4",
+      "id": "8a8d7377-9a16-4524-9fda-87169574c8fa",
       "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "sYYc1quvDf0jlJaQ",
-          "name": "rpoernomo account"
-        }
-      },
       "disabled": true
     },
     {
@@ -629,10 +594,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        3700,
-        -1020
+        1060,
+        220
       ],
-      "id": "86489b62-70c5-4cd9-9688-2b66b555f09a",
+      "id": "b7a54617-2b64-44d4-a6e5-644257008e64",
       "name": "Structured Output Parser",
       "disabled": true
     },
@@ -646,12 +611,88 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        1500,
-        -440
+        -1140,
+        800
       ],
-      "id": "b492e24c-a523-467e-811e-d149d13c7404",
+      "id": "495d8cdb-9712-4d30-9e6f-6266401a6b0b",
       "name": "Webhook chatbot trigger",
       "webhookId": "e5a15a44-a6e5-4f76-b096-73ec34a96d90"
+    },
+    {
+      "parameters": {
+        "model": "llama3:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        880,
+        1500
+      ],
+      "id": "295c5523-eba7-48ab-ad64-88c334f6ca8d",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "d8j1hRbQJeX3SBlB",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# 📝 Note\n\n1. (NOTE) Ubah input dan responsenya sesuai dengan open web ui\n2. (CHALLANGE) Coba buat image proses yang dapat mendeskripsikan gambar\n3. (NOTE) gunakan execute workflow untuk mengarahkan jika ada file pdf, foto, dll",
+        "height": 240,
+        "width": 500
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        660
+      ],
+      "id": "20d058f2-d17d-4894-b359-8e2d502376a5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "iYjL37grrVtj2W48",
+          "mode": "list",
+          "cachedResultName": "TSEL-PDF-Uploader"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -740,
+        800
+      ],
+      "id": "a5d6c538-313c-42d0-8544-52946ba56cf3",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('sessionData').item.json.sessionId }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        980,
+        1620
+      ],
+      "id": "ccc0f43b-ea7f-4ed2-9343-87856bc84cc2",
+      "name": "chat core memory"
     }
   ],
   "pinData": {},
@@ -700,11 +741,6 @@
         ]
       ]
     },
-    "inputProcessor": {
-      "main": [
-        []
-      ]
-    },
     "Switch": {
       "main": [
         [],
@@ -746,11 +782,6 @@
         ]
       ]
     },
-    "other prompt": {
-      "main": [
-        []
-      ]
-    },
     "build prompt": {
       "main": [
         [
@@ -764,24 +795,7 @@
     },
     "Groq Chat Model": {
       "ai_languageModel": [
-        [
-          {
-            "node": "ChatCore",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Simple Memory2": {
-      "ai_memory": [
-        [
-          {
-            "node": "ChatCore",
-            "type": "ai_memory",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "ChatCore": {
@@ -908,11 +922,6 @@
         ]
       ]
     },
-    "Respond img prompt": {
-      "main": [
-        []
-      ]
-    },
     "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
@@ -945,23 +954,49 @@
           }
         ]
       ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ChatCore",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        []
+      ]
+    },
+    "chat core memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "ChatCore",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "8751902e-378d-4e71-a321-02396250f95c",
+  "versionId": "98817d04-9d2c-4995-913f-653d38b4a318",
   "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "d4e633e404e6552a6e20f7b9de445e52a35184dfa4ba0f40e2edcf4e8a606373"
+    "instanceId": "bd6cd94e96dcc625bd73366095f95952b0a4a204b9d0a766da8fb9750cba033c"
   },
-  "id": "PXupT0w9bo8X9XC1",
+  "id": "SonoWb7YBmPFiuQj",
   "tags": [
     {
-      "createdAt": "2025-07-04T03:38:46.429Z",
-      "updatedAt": "2025-07-04T03:38:46.429Z",
-      "id": "huPUZkVM0WOYriWi",
+      "createdAt": "2025-07-14T06:33:17.571Z",
+      "updatedAt": "2025-07-14T06:33:17.571Z",
+      "id": "vUsdXc4dDAWxuf81",
       "name": "Tsel AI Lab"
     }
   ]

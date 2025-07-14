@@ -9,11 +9,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        720,
-        -420
+        -1580,
+        220
       ],
       "typeVersion": 1,
-      "id": "1f5f573d-ab2f-4551-a134-cd0f3f6c4225",
+      "id": "e9fd0492-e988-462f-a1aa-d1d8d11fea62",
       "name": "Sticky Note"
     },
     {
@@ -25,14 +25,14 @@
       "type": "n8n-nodes-base.jwt",
       "typeVersion": 1,
       "position": [
-        1300,
-        40
+        -1000,
+        680
       ],
-      "id": "de0b5dea-a0a2-4a73-9f51-dfb28b445960",
+      "id": "b749265d-1f09-48e7-b960-1f21de8c8794",
       "name": "JWT",
       "credentials": {
         "jwtAuth": {
-          "id": "wQv7Mmg2TdsmIkxQ",
+          "id": "DIKYTiCd0YBNntFq",
           "name": "JWT Auth account"
         }
       }
@@ -65,10 +65,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1120,
-        40
+        -1180,
+        680
       ],
-      "id": "ca0bae4d-35f6-46f7-af9d-c5c910afbe9d",
+      "id": "8ec995ac-9385-471c-a666-10eea3391e76",
       "name": "isToken?"
     },
     {
@@ -78,10 +78,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1480,
-        40
+        -820,
+        680
       ],
-      "id": "e5353f8b-e1b1-435d-b7a3-891e09ecde94",
+      "id": "4dabb544-584b-4cd4-aa65-7836ad8a1b5f",
       "name": "validation exp token"
     },
     {
@@ -112,10 +112,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2040,
-        -160
+        -260,
+        480
       ],
-      "id": "d7886979-9e2e-4600-8ad6-c382f8be68de",
+      "id": "ef1d62d9-e628-4fe8-8ceb-be41b03f5006",
       "name": "isToken exp?"
     },
     {
@@ -129,10 +129,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        2040,
-        100
+        -260,
+        740
       ],
-      "id": "312ca72c-2bae-4dd9-a93e-445d62b7652f",
+      "id": "e0cce1b5-ead8-4d12-bac2-fd2fca88a647",
       "name": "Response token exp"
     },
     {
@@ -146,10 +146,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        1100,
-        320
+        -1200,
+        960
       ],
-      "id": "8defbe8b-81ff-45af-a39f-bf308f4c93e7",
+      "id": "e28fa7e9-c9a1-4ad1-aa5f-aa8a75f20004",
       "name": "Response token isEmpty"
     },
     {
@@ -161,10 +161,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        1400,
-        -520
+        -900,
+        120
       ],
-      "id": "2e4b75a1-df83-4156-ae18-795e7a93cfe4",
+      "id": "df28704d-cd0c-4194-8b29-1032d0611fa7",
       "name": "Extract from File"
     },
     {
@@ -174,38 +174,21 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2260,
-        -180
+        -40,
+        460
       ],
-      "id": "ce688d53-7f1a-4b85-b47e-c0a80504f82a",
+      "id": "4e670494-3938-40d7-8710-e426d3efc584",
       "name": "Split PDF into Chunks"
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        2680,
-        -20
-      ],
-      "id": "2672c397-270a-4d0b-82a0-dd248341682d",
-      "name": "Embeddings Google Gemini",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "kFfL5vlfaWFP4luN",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
     },
     {
       "parameters": {},
       "type": "@n8n/n8n-nodes-langchain.textSplitterTokenSplitter",
       "typeVersion": 1,
       "position": [
-        2820,
-        200
+        520,
+        840
       ],
-      "id": "63c2b0bd-1523-4fee-8a0e-944560eba837",
+      "id": "ff9b34bd-6c7d-4007-a654-7b6dd2bee79f",
       "name": "Token Splitter"
     },
     {
@@ -214,12 +197,12 @@
         "jsonData": "={{ $json.text }}",
         "options": {}
       },
-      "id": "59995ddb-c203-4056-8ae9-e81945d86182",
+      "id": "2d4037ea-8129-450c-ae1d-0475b9fb49c1",
       "name": "Default Data Loader",
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "position": [
-        2820,
-        0
+        520,
+        640
       ],
       "typeVersion": 1
     },
@@ -236,19 +219,19 @@
           "collectionConfig": ""
         }
       },
-      "id": "6f363158-2aa5-44bf-99ed-bebd51720f3f",
+      "id": "4b2f5a49-1896-4789-ab67-3282c92095d6",
       "name": "Qdrant Vector Store",
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "position": [
-        2700,
-        -180
+        400,
+        460
       ],
       "typeVersion": 1,
       "alwaysOutputData": true,
       "credentials": {
         "qdrantApi": {
-          "id": "UIxsFAEU14wSNUX7",
-          "name": "Fix QdrantApi account"
+          "id": "WvMXTDUfDLp2KASV",
+          "name": "QdrantApi account"
         }
       }
     },
@@ -269,10 +252,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1400,
-        -260
+        -900,
+        380
       ],
-      "id": "5b0b58d8-cf7a-45ab-87dc-0cd926932a20",
+      "id": "0c159c95-d98a-4826-b02d-1856b6f46e39",
       "name": "fileName parameter"
     },
     {
@@ -291,12 +274,12 @@
         },
         "options": {}
       },
-      "id": "6c90a78f-2490-448f-97dd-7439a70665a5",
+      "id": "81f6cf88-e6e1-4b8f-9b09-ae3f82ca01f7",
       "name": "tokenInput",
       "type": "n8n-nodes-base.set",
       "position": [
-        1100,
-        -200
+        -1200,
+        440
       ],
       "typeVersion": 2
     },
@@ -305,10 +288,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1640,
-        -400
+        -660,
+        240
       ],
-      "id": "9d8f10c7-767c-478f-ae94-1e688add8c58",
+      "id": "952ce128-8a85-4824-8db2-bab705cdcdfc",
       "name": "Merge PDF"
     },
     {
@@ -320,10 +303,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1840,
-        -160
+        -460,
+        480
       ],
-      "id": "f145611c-ba2c-4480-9069-dd64d3d0eb1c",
+      "id": "807888a2-b9d7-44ac-81c3-f780de1efd32",
       "name": "Merge wth token"
     },
     {
@@ -347,12 +330,12 @@
         },
         "options": {}
       },
-      "id": "32481893-7ef5-4d7c-aa23-295c62e8383b",
+      "id": "5826fd36-e96f-495a-9809-1979f020078e",
       "name": "pdf chunks",
       "type": "n8n-nodes-base.set",
       "position": [
-        2460,
-        -180
+        160,
+        460
       ],
       "typeVersion": 2
     },
@@ -363,10 +346,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2300,
-        -640
+        0,
+        0
       ],
-      "id": "566118dc-d578-44fc-a9b8-05b2b1548ca7",
+      "id": "033df596-d225-4044-affb-82c400defdc9",
       "name": "formatin code",
       "disabled": true
     },
@@ -377,10 +360,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2440,
-        -640
+        140,
+        0
       ],
-      "id": "ea99c029-6073-4fd7-9a26-e74580f88149",
+      "id": "21ea5d73-d47b-4cbf-8002-5ed582e93b68",
       "name": "filter karakter Unicode",
       "disabled": true
     },
@@ -395,10 +378,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        3060,
-        -180
+        760,
+        460
       ],
-      "id": "83b4d9f3-4208-40b2-8c1e-d6f8eba9281b",
+      "id": "ecbc691b-3305-4b27-a1df-6e6b61da1b21",
       "name": "Respond to Webhook"
     },
     {
@@ -413,12 +396,29 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        1100,
-        -440
+        -1200,
+        200
       ],
-      "id": "fffe1d03-ead1-4201-bfb5-5a1a17c03081",
+      "id": "6a8acc66-15f2-46d9-ae56-5a82c815e29f",
       "name": "Webhook pdf trigger",
       "webhookId": "673c3b44-570f-4e67-b8b4-1837a69b4e2a"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        380,
+        620
+      ],
+      "id": "3635d604-c6ae-4441-80da-fe2240d2dc7d",
+      "name": "Embeddings Gemini Credential",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "hu7ixQhsS09un4nf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -487,17 +487,6 @@
           {
             "node": "Merge PDF",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Embeddings Google Gemini": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Qdrant Vector Store",
-            "type": "ai_embedding",
             "index": 0
           }
         ]
@@ -613,11 +602,6 @@
         ]
       ]
     },
-    "filter karakter Unicode": {
-      "main": [
-        []
-      ]
-    },
     "Webhook pdf trigger": {
       "main": [
         [
@@ -638,23 +622,34 @@
           }
         ]
       ]
+    },
+    "Embeddings Gemini Credential": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "efb61834-e7d1-4ec8-9ed9-4d1770959d73",
+  "versionId": "2728fa6c-edf0-48cc-9374-ec8da7d8755d",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "d4e633e404e6552a6e20f7b9de445e52a35184dfa4ba0f40e2edcf4e8a606373"
+    "instanceId": "bd6cd94e96dcc625bd73366095f95952b0a4a204b9d0a766da8fb9750cba033c"
   },
-  "id": "dAtsqTOSdt7BGubY",
+  "id": "iYjL37grrVtj2W48",
   "tags": [
     {
-      "createdAt": "2025-07-04T03:38:46.429Z",
-      "updatedAt": "2025-07-04T03:38:46.429Z",
-      "id": "huPUZkVM0WOYriWi",
+      "createdAt": "2025-07-14T06:33:17.571Z",
+      "updatedAt": "2025-07-14T06:33:17.571Z",
+      "id": "vUsdXc4dDAWxuf81",
       "name": "Tsel AI Lab"
     }
   ]
