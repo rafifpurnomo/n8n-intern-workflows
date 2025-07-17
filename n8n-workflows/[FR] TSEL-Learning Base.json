@@ -1,21 +1,6 @@
 {
-  "name": "TSEL-PDF-Uploader",
+  "name": "[FR] TSEL-Learning Base",
   "nodes": [
-    {
-      "parameters": {
-        "content": "\npakai RAG dan Qdrant Vector Store untuk menyimpan pdf",
-        "height": 80,
-        "width": 200
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -1580,
-        220
-      ],
-      "typeVersion": 1,
-      "id": "e9fd0492-e988-462f-a1aa-d1d8d11fea62",
-      "name": "Sticky Note"
-    },
     {
       "parameters": {
         "operation": "decode",
@@ -25,8 +10,8 @@
       "type": "n8n-nodes-base.jwt",
       "typeVersion": 1,
       "position": [
-        -1000,
-        680
+        -1008,
+        688
       ],
       "id": "b749265d-1f09-48e7-b960-1f21de8c8794",
       "name": "JWT",
@@ -65,8 +50,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1180,
-        680
+        -1184,
+        688
       ],
       "id": "8ec995ac-9385-471c-a666-10eea3391e76",
       "name": "isToken?"
@@ -78,8 +63,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -820,
-        680
+        -816,
+        688
       ],
       "id": "4dabb544-584b-4cd4-aa65-7836ad8a1b5f",
       "name": "validation exp token"
@@ -112,7 +97,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -260,
+        -256,
         480
       ],
       "id": "ef1d62d9-e628-4fe8-8ceb-be41b03f5006",
@@ -129,8 +114,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -260,
-        740
+        -256,
+        752
       ],
       "id": "e0cce1b5-ead8-4d12-bac2-fd2fca88a647",
       "name": "Response token exp"
@@ -161,8 +146,8 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -900,
-        120
+        -896,
+        128
       ],
       "id": "df28704d-cd0c-4194-8b29-1032d0611fa7",
       "name": "Extract from File"
@@ -174,8 +159,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -40,
-        460
+        -48,
+        464
       ],
       "id": "4e670494-3938-40d7-8710-e426d3efc584",
       "name": "Split PDF into Chunks"
@@ -185,8 +170,8 @@
       "type": "@n8n/n8n-nodes-langchain.textSplitterTokenSplitter",
       "typeVersion": 1,
       "position": [
-        520,
-        840
+        528,
+        848
       ],
       "id": "ff9b34bd-6c7d-4007-a654-7b6dd2bee79f",
       "name": "Token Splitter"
@@ -201,7 +186,7 @@
       "name": "Default Data Loader",
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "position": [
-        520,
+        528,
         640
       ],
       "typeVersion": 1
@@ -211,9 +196,9 @@
         "mode": "insert",
         "qdrantCollection": {
           "__rl": true,
-          "value": "file_pdf",
+          "value": "learning_based",
           "mode": "list",
-          "cachedResultName": "file_pdf"
+          "cachedResultName": "learning_based"
         },
         "options": {
           "collectionConfig": ""
@@ -224,7 +209,7 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "position": [
         400,
-        460
+        464
       ],
       "typeVersion": 1,
       "alwaysOutputData": true,
@@ -252,8 +237,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -900,
-        380
+        -896,
+        384
       ],
       "id": "0c159c95-d98a-4826-b02d-1856b6f46e39",
       "name": "fileName parameter"
@@ -279,7 +264,7 @@
       "type": "n8n-nodes-base.set",
       "position": [
         -1200,
-        440
+        448
       ],
       "typeVersion": 2
     },
@@ -288,7 +273,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -660,
+        -656,
         240
       ],
       "id": "952ce128-8a85-4824-8db2-bab705cdcdfc",
@@ -303,7 +288,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -460,
+        -464,
         480
       ],
       "id": "807888a2-b9d7-44ac-81c3-f780de1efd32",
@@ -335,7 +320,7 @@
       "type": "n8n-nodes-base.set",
       "position": [
         160,
-        460
+        464
       ],
       "typeVersion": 2
     },
@@ -360,7 +345,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        140,
+        144,
         0
       ],
       "id": "21ea5d73-d47b-4cbf-8002-5ed582e93b68",
@@ -378,8 +363,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        760,
-        460
+        768,
+        464
       ],
       "id": "ecbc691b-3305-4b27-a1df-6e6b61da1b21",
       "name": "Respond to Webhook"
@@ -397,7 +382,7 @@
       "typeVersion": 2,
       "position": [
         -1200,
-        200
+        208
       ],
       "id": "6a8acc66-15f2-46d9-ae56-5a82c815e29f",
       "name": "Webhook pdf trigger",
@@ -408,8 +393,8 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        380,
-        620
+        384,
+        624
       ],
       "id": "3635d604-c6ae-4441-80da-fe2240d2dc7d",
       "name": "Embeddings Gemini Credential",
@@ -635,11 +620,11 @@
       ]
     }
   },
-  "active": true,
+  "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "2728fa6c-edf0-48cc-9374-ec8da7d8755d",
+  "versionId": "3aedf6ba-7347-4e87-a19c-b23e76e938ea",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "bd6cd94e96dcc625bd73366095f95952b0a4a204b9d0a766da8fb9750cba033c"

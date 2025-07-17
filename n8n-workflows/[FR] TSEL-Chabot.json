@@ -1,5 +1,5 @@
 {
-  "name": "TSEL-Chabot",
+  "name": "[FR] TSEL-Chabot",
   "nodes": [
     {
       "parameters": {
@@ -22,8 +22,8 @@
       "name": "sessionData",
       "type": "n8n-nodes-base.set",
       "position": [
-        -40,
-        1260
+        -48,
+        1264
       ],
       "typeVersion": 2
     },
@@ -37,8 +37,8 @@
       "name": "conversationStore",
       "type": "@n8n/n8n-nodes-langchain.memoryManager",
       "position": [
-        120,
-        1260
+        128,
+        1264
       ],
       "typeVersion": 1.1
     },
@@ -47,8 +47,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        120,
-        1460
+        128,
+        1472
       ],
       "id": "1a3a20c3-c744-4926-83f7-71af79e0cb37",
       "name": "Simple Memory"
@@ -61,7 +61,7 @@
       "typeVersion": 2,
       "position": [
         400,
-        1260
+        1264
       ],
       "id": "9451b443-92e9-4094-9451-9d9c2a80978a",
       "name": "latestContext"
@@ -76,8 +76,8 @@
       "name": "inputProcessor",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "position": [
-        900,
-        40
+        912,
+        48
       ],
       "typeVersion": 1.6,
       "alwaysOutputData": false,
@@ -192,8 +192,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        580,
-        1260
+        592,
+        1264
       ],
       "id": "a4716c96-1d3b-4b6e-a55b-90a71d5ea087",
       "name": "chat prompt"
@@ -215,7 +215,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        300,
+        304,
         0
       ],
       "id": "1f6b009e-2e02-4903-b991-21a58615bb01",
@@ -263,8 +263,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        760,
-        1260
+        768,
+        1264
       ],
       "id": "e4325bc6-ddd0-4cf3-972d-cbb0e4142e32",
       "name": "build prompt"
@@ -272,7 +272,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Input dari pengguna: {{ $('chatInput').item.json.chatInput }}\n\n{{ $json.prompt }}",
+        "text": "=Input dari pengguna: {{ $json.chatInput }}\n\n{{ $json.prompt }}",
         "options": {
           "systemMessage": "=Anda chatbot profesional untuk perusahaan yang dirancang untuk membantu pengguna dengan komunikasi yang jelas, sopan, dan akurat. Anda memberikan respons teks yang informatif dan menghasilkan gambar hanya jika diminta secara eksplisit oleh pengguna. Gunakan riwayat percakapan yang tersedia untuk menjaga konteks dan kesinambungan. Patuhi aturan perusahaan secara ketat untuk memastikan interaksi yang tepat dan aman.Anda dapat mengobrol dengan saya untuk mendapatkan jawaban dan membuat gambar khusus berdasarkan instruksi Anda.Prioritaskan pesan relevan yang paling baru jika terdapat beberapa referensi sebelumnya. Balas dalam Bahasa Indonesia untuk semua permintaan teks (chat, otherdan generate). Jaga agar respons tetap sependek mungkin tanpa mengurangi kejelasan atau kelancaran interaksi. Jangan memaksakan interaksi lebih dari yang diperlukan untuk memberikan jawaban yang jelas."
         }
@@ -281,8 +281,8 @@
       "name": "ChatCore",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        980,
-        1260
+        992,
+        1264
       ],
       "typeVersion": 1.9
     },
@@ -293,8 +293,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        740,
-        1500
+        864,
+        1504
       ],
       "id": "aafa25a9-8dd7-426c-9e49-61198b9814dd",
       "name": "Groq Chat Model",
@@ -312,22 +312,23 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        1340,
-        1260
+        -224,
+        208
       ],
       "id": "b7bdd533-d37b-4a62-b4b4-2f024034df27",
-      "name": "Respond to Webhook"
+      "name": "Respond to Webhook",
+      "disabled": true
     },
     {
       "parameters": {
         "operation": "decode",
-        "token": "={{ $json.token }}",
+        "token": "={{ $('When Executed by Another Workflow').item.json.token }}",
         "options": {}
       },
       "type": "n8n-nodes-base.jwt",
       "typeVersion": 1,
       "position": [
-        -900,
+        -896,
         1280
       ],
       "id": "6db01d02-9cf3-490a-be9d-7a1ac501284e",
@@ -346,7 +347,7 @@
           "string": [
             {
               "name": "chatInput",
-              "value": "={{ $('Webhook chatbot trigger').item.json.body.chatInput }}"
+              "value": "={{ $json.chatInput }}"
             }
           ]
         },
@@ -357,43 +358,9 @@
       "type": "n8n-nodes-base.set",
       "position": [
         -320,
-        1260
+        1264
       ],
       "typeVersion": 2
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "6008934a-29d4-4fa0-8da9-1d17a49351cb",
-              "leftValue": "={{ $json.token }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -1120,
-        1280
-      ],
-      "id": "696f0cf9-2bae-479d-842e-302a11fdf3b2",
-      "name": "isToken?"
     },
     {
       "parameters": {
@@ -402,7 +369,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -700,
+        -704,
         1280
       ],
       "id": "b1c3a801-23f6-4280-ac96-9ae65d876c00",
@@ -436,45 +403,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -480,
+        -528,
         1280
       ],
       "id": "efb1ce26-1d1c-472d-af33-6fc44754681c",
       "name": "isToken exp?"
-    },
-    {
-      "parameters": {
-        "respondWith": "json",
-        "responseBody": "{\n  \"success\": false,\n  \"message\": \"Sesi anda telah berakhir, harap lakukan login terlebih dahulu\"\n}",
-        "options": {
-          "responseCode": 404
-        }
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.4,
-      "position": [
-        -480,
-        1540
-      ],
-      "id": "a00e98ac-5919-4346-8aee-c3967790d302",
-      "name": "Response token exp"
-    },
-    {
-      "parameters": {
-        "respondWith": "json",
-        "responseBody": "{\n  \"success\": false,\n  \"message\": \"harap lakukan login terlebih dahulu\"\n}",
-        "options": {
-          "responseCode": 400
-        }
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.4,
-      "position": [
-        -1140,
-        1560
-      ],
-      "id": "492db853-8dd4-47a5-8a2d-ffed8f965743",
-      "name": "Response token isEmpty"
     },
     {
       "parameters": {
@@ -483,7 +416,7 @@
           "string": [
             {
               "name": "token",
-              "value": "={{ $json.headers[\"authorization\"] ? $json.headers[\"authorization\"].replace(\"Bearer \", \"\").trim() : '' }}"
+              "value": "={{ $json.token }}"
             }
           ]
         },
@@ -493,7 +426,7 @@
       "name": "tokenInput",
       "type": "n8n-nodes-base.set",
       "position": [
-        -1140,
+        -1136,
         1040
       ],
       "typeVersion": 2
@@ -503,8 +436,8 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1180,
-        1620
+        1184,
+        1632
       ],
       "id": "828ee660-0e8e-45e5-ad29-c37cc382fc65",
       "name": "Embeddings Google Gemini1",
@@ -522,8 +455,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -180,
-        1260
+        -176,
+        1264
       ],
       "id": "fee3e10c-26bc-4251-afb2-04983b8c5866",
       "name": "lastPrompt"
@@ -544,8 +477,8 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        1180,
-        1460
+        1184,
+        1472
       ],
       "id": "bb447b0a-2e59-4c05-9b0a-23dc48c4396b",
       "name": "Qdrant Vector Store2",
@@ -565,7 +498,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        520,
+        528,
         0
       ],
       "id": "0a789c69-7c6d-49c8-b2eb-2166c0a30983",
@@ -580,8 +513,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        900,
-        220
+        912,
+        224
       ],
       "id": "8a8d7377-9a16-4524-9fda-87169574c8fa",
       "name": "Google Gemini Chat Model",
@@ -594,8 +527,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1060,
-        220
+        1072,
+        224
       ],
       "id": "b7a54617-2b64-44d4-a6e5-644257008e64",
       "name": "Structured Output Parser",
@@ -611,32 +544,13 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -1140,
-        800
+        32,
+        304
       ],
       "id": "495d8cdb-9712-4d30-9e6f-6266401a6b0b",
       "name": "Webhook chatbot trigger",
-      "webhookId": "e5a15a44-a6e5-4f76-b096-73ec34a96d90"
-    },
-    {
-      "parameters": {
-        "model": "llama3:latest",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
-      "typeVersion": 1,
-      "position": [
-        880,
-        1500
-      ],
-      "id": "295c5523-eba7-48ab-ad64-88c334f6ca8d",
-      "name": "Ollama Chat Model",
-      "credentials": {
-        "ollamaApi": {
-          "id": "d8j1hRbQJeX3SBlB",
-          "name": "Ollama account"
-        }
-      }
+      "webhookId": "e5a15a44-a6e5-4f76-b096-73ec34a96d90",
+      "disabled": true
     },
     {
       "parameters": {
@@ -647,38 +561,11 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -420,
-        660
+        -416,
+        672
       ],
       "id": "20d058f2-d17d-4894-b359-8e2d502376a5",
       "name": "Sticky Note"
-    },
-    {
-      "parameters": {
-        "workflowId": {
-          "__rl": true,
-          "value": "iYjL37grrVtj2W48",
-          "mode": "list",
-          "cachedResultName": "TSEL-PDF-Uploader"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.2,
-      "position": [
-        -740,
-        800
-      ],
-      "id": "a5d6c538-313c-42d0-8544-52946ba56cf3",
-      "name": "Execute Workflow"
     },
     {
       "parameters": {
@@ -688,11 +575,94 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        980,
-        1620
+        992,
+        1632
       ],
       "id": "ccc0f43b-ea7f-4ed2-9343-87856bc84cc2",
       "name": "chat core memory"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "chatInput"
+            },
+            {
+              "name": "token"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1696,
+        864
+      ],
+      "id": "34090ad5-b4bf-41c4-a965-0bb314774325",
+      "name": "When Executed by Another Workflow",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      \"succes\": false,\n      \"errMessage\": \"harap lakukan login\"\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1120,
+        1552
+      ],
+      "id": "ff50c554-92c1-4b4a-8e53-762cfcc623e9",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6008934a-29d4-4fa0-8da9-1d17a49351cb",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.token }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1120,
+        1280
+      ],
+      "id": "696f0cf9-2bae-479d-842e-302a11fdf3b2",
+      "name": "isToken?"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      \"succes\": false,\n      \"errMessage\": \"harap lakukan login\"\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        1552
+      ],
+      "id": "5fa27275-6c8a-4323-95b0-a7df6c6a4412",
+      "name": "missing token response"
     }
   ],
   "pinData": {},
@@ -795,18 +765,18 @@
     },
     "Groq Chat Model": {
       "ai_languageModel": [
-        []
+        [
+          {
+            "node": "ChatCore",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
       ]
     },
     "ChatCore": {
       "main": [
-        [
-          {
-            "node": "Respond to Webhook",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "JWT": {
@@ -825,24 +795,6 @@
         [
           {
             "node": "lastPrompt",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "isToken?": {
-      "main": [
-        [
-          {
-            "node": "JWT",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Response token isEmpty",
             "type": "main",
             "index": 0
           }
@@ -871,7 +823,7 @@
         ],
         [
           {
-            "node": "Response token exp",
+            "node": "missing token response",
             "type": "main",
             "index": 0
           }
@@ -946,28 +898,6 @@
     },
     "Webhook chatbot trigger": {
       "main": [
-        [
-          {
-            "node": "tokenInput",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Ollama Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "ChatCore",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Execute Workflow": {
-      "main": [
         []
       ]
     },
@@ -981,13 +911,42 @@
           }
         ]
       ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "tokenInput",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isToken?": {
+      "main": [
+        [
+          {
+            "node": "JWT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "98817d04-9d2c-4995-913f-653d38b4a318",
+  "versionId": "6ad24bc8-ab38-4063-8654-cc5163d14259",
   "meta": {
     "instanceId": "bd6cd94e96dcc625bd73366095f95952b0a4a204b9d0a766da8fb9750cba033c"
   },

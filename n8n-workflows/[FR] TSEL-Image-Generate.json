@@ -1,5 +1,5 @@
 {
-  "name": "TSEL-Image-Generate",
+  "name": "[FR] TSEL-Image-Generate",
   "nodes": [
     {
       "parameters": {
@@ -31,8 +31,8 @@
       "name": "Fields - Set Values",
       "type": "n8n-nodes-base.set",
       "position": [
-        1240,
-        300
+        1248,
+        304
       ],
       "typeVersion": 3.4
     },
@@ -44,8 +44,8 @@
       "name": "Code - Clean Json",
       "type": "n8n-nodes-base.code",
       "position": [
-        1860,
-        300
+        1872,
+        304
       ],
       "executeOnce": false,
       "typeVersion": 2,
@@ -59,8 +59,8 @@
       "name": "Code - Get Prompt",
       "type": "n8n-nodes-base.code",
       "position": [
-        2040,
-        300
+        2048,
+        304
       ],
       "typeVersion": 2,
       "alwaysOutputData": true
@@ -90,8 +90,8 @@
       "name": "HTTP Request - Create Image",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        2540,
-        300
+        2544,
+        304
       ],
       "retryOnFail": true,
       "typeVersion": 4.2,
@@ -106,8 +106,8 @@
       "name": "Code - Set Filename",
       "type": "n8n-nodes-base.code",
       "position": [
-        2200,
-        300
+        2208,
+        304
       ],
       "typeVersion": 2
     },
@@ -145,8 +145,8 @@
       "name": "Google Gemini Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "position": [
-        1420,
-        500
+        1424,
+        512
       ],
       "typeVersion": 1,
       "credentials": {
@@ -169,8 +169,8 @@
       "name": "AI Agent - Create Image From Prompt",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        1420,
-        300
+        1424,
+        304
       ],
       "typeVersion": 1.7
     },
@@ -183,8 +183,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        2760,
-        300
+        2768,
+        304
       ],
       "id": "2b523b86-712c-4b6e-b591-b9de6fd47021",
       "name": "Respond to Webhook"
@@ -217,7 +217,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        360,
+        368,
         320
       ],
       "id": "c9518d6c-b067-4ed4-abae-c6068a539a03",
@@ -282,7 +282,7 @@
       "typeVersion": 1.4,
       "position": [
         880,
-        580
+        592
       ],
       "id": "1c2481f9-d376-4c16-b574-63fb0604e8c2",
       "name": "Response token exp"
@@ -298,8 +298,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        340,
-        600
+        352,
+        608
       ],
       "id": "31b3976d-ab08-4fdb-81a3-9ccd534f36a1",
       "name": "Response token isEmpty"
@@ -321,7 +321,7 @@
       "name": "tokenInput",
       "type": "n8n-nodes-base.set",
       "position": [
-        200,
+        208,
         320
       ],
       "typeVersion": 2
@@ -352,7 +352,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1220,
+        1232,
         0
       ],
       "id": "0c2f0bc9-bfcf-43c0-87f8-d79a7cf6ae4c",
@@ -368,7 +368,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1820,
+        1824,
         0
       ],
       "id": "f3561650-5b06-4a53-bc05-91ef3268651f",
@@ -384,7 +384,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2440,
+        2448,
         0
       ],
       "id": "a53b0a4e-f1e1-47d4-9c7f-23f9bdeff58b",
@@ -400,7 +400,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        20,
+        32,
         320
       ],
       "id": "ebc32744-f838-4460-8354-840fb22dc0e5",
@@ -416,7 +416,7 @@
       "type": "n8n-nodes-base.jwt",
       "typeVersion": 1,
       "position": [
-        540,
+        544,
         320
       ],
       "id": "ecb00813-830f-4040-951d-9ad3d0b54358",
@@ -593,7 +593,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "6a23d351-6900-4ca9-a6b8-24d2f34145b3",
+  "versionId": "1a80cbe5-c34c-4c48-8757-c816645a315e",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "bd6cd94e96dcc625bd73366095f95952b0a4a204b9d0a766da8fb9750cba033c"
